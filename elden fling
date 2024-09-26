@@ -1,0 +1,76 @@
+import random
+
+class Character:
+    def __init__(self, name, health, attack):
+        self.name = name
+        self.health = health
+        self.attack = attack
+
+    def is_alive(self):
+        return self.health > 0
+
+class Game:
+    def __init__(self):
+        self.player = None
+        self.enemies = [
+            Character("Goblin", 30, 5),
+            Character("Skeleton", 25, 6),
+            Character("Bandit", 40, 8),
+        ]
+        self.items = ["Health Potion", "Mana Potion"]
+    
+    def create_character(self):
+        name = input("Enter your character's name: ")
+        self.player = Character(name, 100, 10)
+        print(f"{self.player.name} has entered the realm with {self.player.health} health!")
+
+    def explore(self):
+        print("\nYou explore the eerie lands...")
+        encounter = random.choice(["enemy", "item", "nothing"])
+        
+        if encounter == "enemy":
+            self.fight()
+        elif encounter == "item":
+            self.find_item()
+        else:
+            print("You find nothing of interest.")
+        
+    def fight(self):
+        enemy = random.choice(self.enemies)
+        print(f"A wild {enemy.name} appears!")
+        
+        while enemy.is_alive() and self.player.is_alive():
+            action = input("Do you want to (1) Attack or (2) Flee? ")
+            if action == "1":
+                enemy.health -= self.player.attack
+                print(f"You attack the {enemy.name} for {self.player.attack} damage.")
+                if enemy.is_alive():
+                    self.player.health -= enemy.attack
+                    print(f"The {enemy.name} attacks you for {enemy.attack} damage.")
+            elif action == "2":
+                print("You fled successfully!")
+                return
+                
+            print(f"{self.player.name} Health: {self.player.health}, {enemy.name} Health: {enemy.health}")
+        
+        if not player.is_alive():
+            print("You have been defeated... Game over.")
+        else:
+            print(f"You defeated the {enemy.name}!")
+    
+    def find_item(self):
+        item = random.choice(self.items)
+        print(f"You found a {item}!")
+        
+        if item == "Health Potion":
+            self.player.health += 20
+            print(f"{self.player.name}'s health is now {self.player.health}.")
+    
+    def start(self):
+        self.create_character()
+        while self.player.is_alive():
+            self.explore()
+    
+if __name__ == "__main__":
+    game = Game()
+    game.start()
